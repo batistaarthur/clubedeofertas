@@ -1,0 +1,350 @@
+
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Melhores Achados e Ofertas | Vitrine Exclusiva</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#f0fdf4',
+                            500: '#22c55e',
+                            600: '#16a34a',
+                            700: '#15803d',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Google Fonts - Inter -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased min-h-screen flex flex-col">
+
+    <!-- Cabeçalho (Header) -->
+    <header class="bg-white border-b border-gray-100 sticky top-0 z-50 shadow-xs">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4 sm:py-6 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <!-- Logo / Nome da Página -->
+            <div class="flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-600 to-emerald-400 flex items-center justify-center text-white font-bold text-xl shadow-sm">
+                    ✨
+                </div>
+                <div>
+                    <h1 class="text-xl font-bold tracking-tight text-gray-900">Garimpo & Ofertas</h1>
+                    <p class="text-xs text-gray-500">Os melhores achados da internet para você</p>
+                </div>
+            </div>
+
+            <!-- Breve Descrição Acolhedora -->
+            <div class="text-center sm:text-right">
+                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-medium bg-emerald-50 text-brand-700 border border-emerald-100">
+                    <span class="w-2 h-2 rounded-full bg-brand-500 animate-pulse"></span>
+                    Atualizado diariamente com cupons reais
+                </span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Seção de Busca e Filtros -->
+    <section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 mt-6 sm:mt-8 w-full">
+        <div class="bg-white rounded-2xl p-4 sm:p-6 shadow-xs border border-gray-100 flex flex-col gap-4">
+            
+            <!-- Campo de Busca Interativo -->
+            <div class="relative w-full">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-4 pointer-events-none text-gray-400">
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"></path>
+                    </svg>
+                </span>
+                <input 
+                    type="text" 
+                    id="searchInput" 
+                    placeholder="Busque por fones, relógios, utilidades, casa..." 
+                    class="w-full pl-11 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-brand-500 focus:bg-white transition-all"
+                >
+            </div>
+
+            <!-- Botões de Filtro por Loja / Categoria -->
+            <div class="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                <button onclick="filterProducts('all')" data-filter="all" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap bg-gray-900 text-white shadow-xs transition-all">
+                    Todos os Achados
+                </button>
+                <button onclick="filterProducts('shopee')" data-filter="shopee" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
+                    Shopee
+                </button>
+                <button onclick="filterProducts('amazon')" data-filter="amazon" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
+                    Amazon
+                </button>
+                <button onclick="filterProducts('mercadolivre')" data-filter="mercadolivre" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
+                    Mercado Livre
+                </button>
+                <button onclick="filterProducts('magalu')" data-filter="magalu" class="filter-btn px-4 py-2 rounded-xl text-xs font-medium whitespace-nowrap bg-gray-100 text-gray-600 hover:bg-gray-200 transition-all">
+                    Magalu
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Grid de Produtos (Vitrine) -->
+    <main class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 my-8 flex-grow w-full">
+        <!-- Indicador de Nenhum Resultado -->
+        <div id="noResults" class="hidden text-center py-16">
+            <p class="text-gray-400 text-base">Nenhum produto encontrado para sua busca. Tente outro termo.</p>
+        </div>
+
+        <!-- Grid Dinâmico -->
+        <div id="productGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+            <!-- Os cards serão injetados via JavaScript para facilidade de manutenção -->
+        </div>
+    </main>
+
+    <!-- Rodapé (Footer) -->
+    <footer class="bg-white border-t border-gray-100 mt-auto py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center text-xs text-gray-500 flex flex-col gap-2">
+            <p>© 2026 Garimpo & Ofertas. Todos os direitos reservados.</p>
+            <p class="max-w-xl mx-auto">Aviso: Os preços e a disponibilidade dos produtos podem sofrer alterações sem aviso prévio. Participamos de programas de afiliados e podemos receber comissões por compras efetuadas através dos links indicados, sem nenhum custo adicional para você.</p>
+        </div>
+    </footer>
+
+    <!-- Script de Manutenção e Funcionalidades (JavaScript) -->
+    <script>
+        /* ==========================================================================
+           ÁREA DE MANUTENÇÃO DE PRODUTOS
+           Para adicionar, remover ou editar produtos, basta alterar os itens abaixo.
+           Atributos disponíveis para cada item:
+           - id: Identificador único numérico
+           - title: Título descritivo do produto
+           - price: Preço atual com desconto/oferta
+           - oldPrice: Preço anterior riscado (opcional, deixe "" se não houver)
+           - store: Identificador da loja ('shopee', 'amazon', 'mercadolivre', 'magalu')
+           - storeName: Nome formatado da loja
+           - category: Categoria do produto para buscas
+           - image: URL da imagem do produto (alta resolução recomendada)
+           - url: Link de afiliado final (destino do botão)
+           ========================================================================== */
+        const products = [
+            {
+                id: 1,
+                title: "Fone de Ouvido Bluetooth Sem Fio TWS com Case de Carregamento Digital",
+                price: "R$ 79,90",
+                oldPrice: "R$ 159,90",
+                store: "shopee",
+                storeName: "Shopee",
+                category: "eletronicos",
+                image: "https://images.unsplash.com/photo-1590658268037-6bf12165a8df?auto=format&fit=crop&w=600&q=80",
+                url: "https://shopee.com.br"
+            },
+            {
+                id: 2,
+                title: "Smartwatch Relógio Inteligente D20 Y68 Esportivo Monitor Cardíaco",
+                price: "R$ 49,90",
+                oldPrice: "R$ 99,90",
+                store: "mercadolivre",
+                storeName: "Mercado Livre",
+                category: "eletronicos",
+                image: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?auto=format&fit=crop&w=600&q=80",
+                url: "https://mercadolivre.com.br"
+            },
+            {
+                id: 3,
+                title: "Kit Organizador Multiuso Transparente para Geladeira e Armário (6 Peças)",
+                price: "R$ 89,90",
+                oldPrice: "R$ 120,00",
+                store: "amazon",
+                storeName: "Amazon",
+                category: "casa",
+                image: "https://images.unsplash.com/photo-1584308666744-24d5c474f2ae?auto=format&fit=crop&w=600&q=80",
+                url: "https://amazon.com.br"
+            },
+            {
+                id: 4,
+                title: "Mini Processador de Alimentos USB Portátil sem Fio 250ml para Temperos",
+                price: "R$ 39,90",
+                oldPrice: "R$ 79,90",
+                store: "magalu",
+                storeName: "Magalu",
+                category: "casa",
+                image: "https://images.unsplash.com/photo-1594385208974-2e75f8d7bb48?auto=format&fit=crop&w=600&q=80",
+                url: "https://magazineluiza.com.br"
+            },
+            {
+                id: 5,
+                title: "Luminária Abajur Led Mesa Touch Sem Fio Recarregável Minimalista",
+                price: "R$ 65,00",
+                oldPrice: "R$ 110,00",
+                store: "shopee",
+                storeName: "Shopee",
+                category: "decoracao",
+                image: "https://images.unsplash.com/photo-1507473885765-e6ed057f782c?auto=format&fit=crop&w=600&q=80",
+                url: "https://shopee.com.br"
+            },
+            {
+                id: 6,
+                title: "Garrafa Térmica Aço Inox com Display Digital LED Temperatura 500ml",
+                price: "R$ 45,00",
+                oldPrice: "R$ 89,90",
+                store: "amazon",
+                storeName: "Amazon",
+                category: "utilidades",
+                image: "https://images.unsplash.com/photo-1602143407151-7111542de6e8?auto=format&fit=crop&w=600&q=80",
+                url: "https://amazon.com.br"
+            },
+            {
+                id: 7,
+                title: "Ring Light de Mesa 16cm com Tripé e Suporte para Smartphone",
+                price: "R$ 35,00",
+                oldPrice: "R$ 70,00",
+                store: "mercadolivre",
+                storeName: "Mercado Livre",
+                category: "eletronicos",
+                image: "https://images.unsplash.com/photo-1527443224154-c4a3942d3acf?auto=format&fit=crop&w=600&q=80",
+                url: "https://mercadolivre.com.br"
+            },
+            {
+                id: 8,
+                title: "Umidificador de Ar Ultrassônico Portátil Difusor de Aromas USB com Led",
+                price: "R$ 55,90",
+                oldPrice: "R$ 99,90",
+                store: "shopee",
+                storeName: "Shopee",
+                category: "casa",
+                image: "https://images.unsplash.com/photo-1608571423902-eed4a5ad8108?auto=format&fit=crop&w=600&q=80",
+                url: "https://shopee.com.br"
+            }
+        ];
+
+        // Mapeamento de estilos visuais (badges) por loja
+        const storeBadgeStyles = {
+            shopee: "bg-red-50 text-red-600 border border-red-200",
+            amazon: "bg-amber-50 text-amber-700 border border-amber-200",
+            mercadolivre: "bg-blue-50 text-blue-700 border border-blue-200",
+            magalu: "bg-sky-50 text-sky-700 border border-sky-200"
+        };
+
+        // Estado atual dos filtros
+        let currentFilter = 'all';
+        let searchQuery = '';
+
+        // Elementos DOM
+        const productGrid = document.getElementById('productGrid');
+        const searchInput = document.getElementById('searchInput');
+        const noResults = document.getElementById('noResults');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+
+        // Função de Renderização dos Produtos
+        function renderProducts() {
+            // Filtrar produtos com base na loja e termo de busca
+            const filtered = products.filter(product => {
+                const matchesStore = currentFilter === 'all' || product.store === currentFilter;
+                const matchesSearch = product.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
+                                      product.storeName.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesStore && matchesSearch;
+            });
+
+            // Gerenciar exibição de estado vazio
+            if (filtered.length === 0) {
+                productGrid.innerHTML = '';
+                noResults.classList.remove('hidden');
+                return;
+            }
+
+            noResults.classList.add('hidden');
+
+            // Gerar HTML dos cards
+            productGrid.innerHTML = filtered.map(product => {
+                const badgeClass = storeBadgeStyles[product.store] || "bg-gray-50 text-gray-700 border border-gray-200";
+                
+                return `
+                    <div class="bg-white rounded-2xl border border-gray-100 shadow-xs hover:shadow-xl transition-all duration-300 flex flex-col overflow-hidden group">
+                        <!-- Imagem do Produto com Proporção Limpa e Hover -->
+                        <div class="relative w-full pt-[100%] bg-gray-100 overflow-hidden">
+                            <img 
+                                src="${product.image}" 
+                                alt="${product.title}" 
+                                class="absolute inset-0 w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+                                loading="lazy"
+                            >
+                            <!-- Selo / Badge da Loja -->
+                            <span class="absolute top-3 left-3 px-2.5 py-1 rounded-lg text-xs font-semibold shadow-xs ${badgeClass}">
+                                ${product.storeName}
+                            </span>
+                        </div>
+
+                        <!-- Conteúdo do Card -->
+                        <div class="p-4 sm:p-5 flex flex-col flex-grow justify-between gap-4">
+                            <div>
+                                <h3 class="text-sm font-medium text-gray-900 line-clamp-2 leading-snug group-hover:text-brand-600 transition-colors">
+                                    ${product.title}
+                                </h3>
+                            </div>
+
+                            <!-- Preço e CTA -->
+                            <div class="flex flex-col gap-3 pt-2 border-t border-gray-50">
+                                <div class="flex items-baseline gap-2">
+                                    <span class="text-lg font-bold text-gray-900">${product.price}</span>
+                                    ${product.oldPrice ? `<span class="text-xs text-gray-400 line-through">${product.oldPrice}</span>` : ''}
+                                </div>
+
+                                <a 
+                                    href="${product.url}" 
+                                    target="_blank" 
+                                    rel="noopener noreferrer"
+                                    class="w-full bg-brand-600 hover:bg-brand-700 text-white font-medium py-2.5 px-4 rounded-xl text-center text-xs tracking-wide transition-colors shadow-xs flex items-center justify-center gap-2 group-hover:bg-brand-700"
+                                >
+                                    Ver Oferta
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"></path>
+                                    </svg>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+        }
+
+        // Função de Filtro por Loja
+        function filterProducts(storeKey) {
+            currentFilter = storeKey;
+            
+            // Atualizar classes visuais dos botões de filtro
+            filterButtons.forEach(btn => {
+                if (btn.getAttribute('data-filter') === storeKey) {
+                    btn.classList.remove('bg-gray-100', 'text-gray-600');
+                    btn.classList.add('bg-gray-900', 'text-white', 'shadow-xs');
+                } else {
+                    btn.classList.remove('bg-gray-900', 'text-white', 'shadow-xs');
+                    btn.classList.add('bg-gray-100', 'text-gray-600');
+                }
+            });
+
+            renderProducts();
+        }
+
+        // Event Listener para Busca em Tempo Real
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.trim();
+            renderProducts();
+        });
+
+        // Inicializar a vitrine ao carregar a página
+        document.addEventListener('DOMContentLoaded', () => {
+            renderProducts();
+        });
+    </script>
+</body>
+</html>
